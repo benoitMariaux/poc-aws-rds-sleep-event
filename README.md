@@ -13,3 +13,9 @@ DB_PASSWORD=$(terraform output -json | jq -r ".db_password.value")
 DB_NAME=$(terraform output -json | jq -r ".db_name.value")
 ```
 `mysql -u ${DB_USERNAME} -p${DB_PASSWORD} -h ${DB_HOST} < mysqlsampledatabase.sql`
+
+# Redis dump loading
+```
+REDIS_HOST=$(terraform output -json | jq -r ".redis_host.value")
+REDIS_PORT=$(terraform output -json | jq -r ".redis_port.value")
+```
