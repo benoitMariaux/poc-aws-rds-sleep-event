@@ -30,11 +30,14 @@ resource "aws_instance" "accessing_redis" {
   }
 
   user_data = <<EOF
+#!/bin/bash -xe
 exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1
 
 yum update -y
+yum install git -y
 amazon-linux-extras install redis6
 
+ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
 git clone git@github.com:benoitMariaux/poc-aws-rds-sleep-event.git 
 
 redis-cli -h ${aws_elasticache_cluster.elasticache_cluster.cache_nodes.0.address} -p 6379 < poc-aws-rds-sleep-event/movies.redis
